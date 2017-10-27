@@ -93,8 +93,8 @@
  k8s-m-1 | 192.168.51.34 | master节点1 | keepalived、nginx、etcd、kubelet、kube-apiserver、kube-scheduler、kube-proxy、kube-dashboard、heapster
  k8s-m-2 | 192.168.51.35 | master节点2 | keepalived、nginx、etcd、kubelet、kube-apiserver、kube-scheduler、kube-proxy、kube-dashboard、heapster
  k8s-m-3 | 192.168.51.36 | master节点3 | keepalived、nginx、etcd、kubelet、kube-apiserver、kube-scheduler、kube-proxy、kube-dashboard、heapster
- 无 | 192.168.51.40 | keepalived虚拟IP | 无
- k8s-node1 ~ 8 | 192.168.51.81 ~ 88 | 8个node节点 | kubelet、kube-proxy
+ 无 | 192.168.51.31 | keepalived虚拟IP | 无
+ k8s-node1 ~ 8 | 192.168.51.61 ~ 68 | 8个node节点 | kubelet、kube-proxy
 
 ---
 [返回目录](#目录)
