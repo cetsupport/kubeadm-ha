@@ -79,9 +79,9 @@
 
 * 负载均衡
 
-> keepalived集群设置一个虚拟ip地址，虚拟ip地址指向k8s-master1、k8s-master2、k8s-master3。
+> keepalived集群设置一个虚拟ip地址，虚拟ip地址指向k8s-m-1、k8s-m-2、k8s-m-3。
 
-> nginx用于k8s-master1、k8s-master2、k8s-master3的apiserver的负载均衡。外部kubectl以及nodes访问apiserver的时候就可以用过keepalived的虚拟ip(192.168.60.80)以及nginx端口(8443)访问master集群的apiserver。
+> nginx用于k8s-m-1、k8s-m-2、k8s-m-3的apiserver的负载均衡。外部kubectl以及nodes访问apiserver的时候就可以用过keepalived的虚拟ip(192.168.51.31)以及nginx端口(8443)访问master集群的apiserver。
 
 ---
 [返回目录](#目录)
@@ -96,6 +96,10 @@
  无 | 192.168.51.31 | keepalived虚拟IP | 无
  k8s-node1 ~ 8 | 192.168.51.61 ~ 68 | 8个node节点 | kubelet、kube-proxy
 
+按照Kubernetes官方推荐，docker, kubelet, 和kube-proxy在容器外安装和运行。 其他服务比如etcd, kube-apiserver, kube-controller-manager, 和 kube-scheduler推荐以容器方式运行。
+
+https://kubernetes.io/docs/getting-started-guides/scratch/
+参见Selecting Images章节
 ---
 [返回目录](#目录)
 
@@ -103,46 +107,47 @@
 
 #### 版本信息
 
-* Linux版本：CentOS 7.3.1611
+* Linux版本：CentOS 7.4.1708
 
 ```
-cat /etc/redhat-release 
-CentOS Linux release 7.3.1611 (Core) 
+# cat /etc/redhat-release
+CentOS Linux release 7.4.1708 (Core)
+
 ```
 
-* docker版本：1.12.6
-
+* docker版本：17.03.2-ce
 ```
 $ docker version
 Client:
- Version:      1.12.6
- API version:  1.24
- Go version:   go1.6.4
- Git commit:   78d1802
- Built:        Tue Jan 10 20:20:01 2017
+ Version:      17.03.2-ce
+ API version:  1.27
+ Go version:   go1.7.5
+ Git commit:   f5ec1e2
+ Built:        Tue Jun 27 03:35:14 2017
  OS/Arch:      linux/amd64
 
 Server:
- Version:      1.12.6
- API version:  1.24
- Go version:   go1.6.4
- Git commit:   78d1802
- Built:        Tue Jan 10 20:20:01 2017
+ Version:      17.03.2-ce
+ API version:  1.27 (minimum version 1.12)
+ Go version:   go1.7.5
+ Git commit:   f5ec1e2
+ Built:        Tue Jun 27 03:35:14 2017
  OS/Arch:      linux/amd64
+ Experimental: false
 ```
 
-* kubeadm版本：v1.7.0
+* kubeadm版本：v1.8.2
 
 ```
-$ kubeadm version
-kubeadm version: &version.Info{Major:"1", Minor:"7", GitVersion:"v1.7.0", GitCommit:"d3ada0119e776222f11ec7945e6d860061339aad", GitTreeState:"clean", BuildDate:"2017-06-29T22:55:19Z", GoVersion:"go1.8.3", Compiler:"gc", Platform:"linux/amd64"}
+# kubeadm version
+kubeadm version: &version.Info{Major:"1", Minor:"8", GitVersion:"v1.8.2", GitCommit:"bdaeafa71f6c7c04636251031f93464384d54963", GitTreeState:"clean", BuildDate:"2017-10-24T19:38:10Z", GoVersion:"go1.8.3", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-* kubelet版本：v1.7.0
+* kubelet版本：v1.8.2
 
 ```
-$ kubelet --version
-Kubernetes v1.7.0
+# kubelet --version
+Kubernetes v1.8.2
 ```
 
 ---
