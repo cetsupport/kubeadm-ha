@@ -100,6 +100,7 @@
 
 https://kubernetes.io/docs/getting-started-guides/scratch/
 参见Selecting Images章节
+
 ---
 [返回目录](#目录)
 
@@ -160,27 +161,28 @@ Kubernetes v1.8.2
 
 [https://www.daocloud.io/mirror#accelerator-doc](https://www.daocloud.io/mirror#accelerator-doc)
 
-* 在本机MacOSX上pull相关docker镜像
+* 在本机上pull相关docker镜像（可使用 https://console.cloud.google.com/gcr/images/google-containers/GLOBAL 搜索最新版本）。也可以参考官方文档(https://kubernetes.io/docs/admin/kubeadm/#config-file) “Running kubeadm without an internet connection”章节
+
 
 ```
-$ docker pull gcr.io/google_containers/kube-proxy-amd64:v1.7.0
-$ docker pull gcr.io/google_containers/kube-apiserver-amd64:v1.7.0
-$ docker pull gcr.io/google_containers/kube-controller-manager-amd64:v1.7.0
-$ docker pull gcr.io/google_containers/kube-scheduler-amd64:v1.7.0
-$ docker pull gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.4
-$ docker pull gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.4
-$ docker pull gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.4
+$ docker pull gcr.io/google_containers/kube-proxy-amd64:v1.8.2
+$ docker pull gcr.io/google_containers/kube-apiserver-amd64:v1.8.2
+$ docker pull gcr.io/google_containers/kube-controller-manager-amd64:v1.8.2
+$ docker pull gcr.io/google_containers/kube-scheduler-amd64:v1.8.2
+$ docker pull gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.7
+$ docker pull gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.7
+$ docker pull gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.7
 $ docker pull nginx:latest
-$ docker pull gcr.io/google_containers/kubernetes-dashboard-amd64:v1.6.1
-$ docker pull quay.io/coreos/flannel:v0.7.1-amd64
-$ docker pull gcr.io/google_containers/heapster-amd64:v1.3.0
+$ docker pull gcr.io/google_containers/kubernetes-dashboard-amd64:v1.7.1
+$ docker pull quay.io/coreos/flannel:v0.8.0-amd64
+$ docker pull gcr.io/google_containers/heapster-amd64:v1.4.3
 $ docker pull gcr.io/google_containers/etcd-amd64:3.0.17
-$ docker pull gcr.io/google_containers/heapster-grafana-amd64:v4.0.2
-$ docker pull gcr.io/google_containers/heapster-influxdb-amd64:v1.1.1
+$ docker pull gcr.io/google_containers/heapster-grafana-amd64:v4.4.3
+$ docker pull gcr.io/google_containers/heapster-influxdb-amd64:v1.3.3
 $ docker pull gcr.io/google_containers/pause-amd64:3.0
 ```
 
-* 在本机MacOSX上获取代码，并进入代码目录
+* 在本机上获取代码，并进入代码目录
 
 ```
 $ git clone https://github.com/cookeem/kubeadm-ha
@@ -191,38 +193,37 @@ $ cd kubeadm-ha
 
 ```
 $ mkdir -p docker-images
-$ docker save -o docker-images/kube-proxy-amd64  gcr.io/google_containers/kube-proxy-amd64:v1.7.0
-$ docker save -o docker-images/kube-apiserver-amd64  gcr.io/google_containers/kube-apiserver-amd64:v1.7.0
-$ docker save -o docker-images/kube-controller-manager-amd64  gcr.io/google_containers/kube-controller-manager-amd64:v1.7.0
-$ docker save -o docker-images/kube-scheduler-amd64  gcr.io/google_containers/kube-scheduler-amd64:v1.7.0
-$ docker save -o docker-images/k8s-dns-sidecar-amd64  gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.4
-$ docker save -o docker-images/k8s-dns-kube-dns-amd64  gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.4
-$ docker save -o docker-images/k8s-dns-dnsmasq-nanny-amd64  gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.4
-$ docker save -o docker-images/heapster-grafana-amd64  gcr.io/google_containers/heapster-grafana-amd64:v4.2.0
+$ docker save -o docker-images/kube-proxy-amd64  gcr.io/google_containers/kube-proxy-amd64:v1.8.2
+$ docker save -o docker-images/kube-apiserver-amd64  gcr.io/google_containers/kube-apiserver-amd64:v1.8.2
+$ docker save -o docker-images/kube-controller-manager-amd64  gcr.io/google_containers/kube-controller-manager-amd64:v1.8.2
+$ docker save -o docker-images/kube-scheduler-amd64  gcr.io/google_containers/kube-scheduler-amd64:v1.8.2
+$ docker save -o docker-images/k8s-dns-sidecar-amd64  gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.7
+$ docker save -o docker-images/k8s-dns-kube-dns-amd64  gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.7
+$ docker save -o docker-images/k8s-dns-dnsmasq-nanny-amd64  gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.7
 $ docker save -o docker-images/nginx  nginx:latest
-$ docker save -o docker-images/kubernetes-dashboard-amd64  gcr.io/google_containers/kubernetes-dashboard-amd64:v1.6.1
-$ docker save -o docker-images/flannel  quay.io/coreos/flannel:v0.7.1-amd64
-$ docker save -o docker-images/heapster-amd64  gcr.io/google_containers/heapster-amd64:v1.3.0
+$ docker save -o docker-images/kubernetes-dashboard-amd64  gcr.io/google_containers/kubernetes-dashboard-amd64:v1.7.1
+$ docker save -o docker-images/flannel  quay.io/coreos/flannel:v0.8.0-amd64
+$ docker save -o docker-images/heapster-amd64  gcr.io/google_containers/heapster-amd64:v1.4.3
 $ docker save -o docker-images/etcd-amd64  gcr.io/google_containers/etcd-amd64:3.0.17
-$ docker save -o docker-images/heapster-grafana-amd64  gcr.io/google_containers/heapster-grafana-amd64:v4.0.2
-$ docker save -o docker-images/heapster-influxdb-amd64  gcr.io/google_containers/heapster-influxdb-amd64:v1.1.1
+$ docker save -o docker-images/heapster-grafana-amd64  gcr.io/google_containers/heapster-grafana-amd64:v4.4.3
+$ docker save -o docker-images/heapster-influxdb-amd64  gcr.io/google_containers/heapster-influxdb-amd64:v1.3.3
 $ docker save -o docker-images/pause-amd64  gcr.io/google_containers/pause-amd64:3.0
 ```
 
 * 在本机MacOSX上把代码以及docker镜像复制到所有节点上
 
 ```
-$ scp -r * root@k8s-master1:/root/kubeadm-ha
-$ scp -r * root@k8s-master2:/root/kubeadm-ha
-$ scp -r * root@k8s-master3:/root/kubeadm-ha
-$ scp -r * root@k8s-node1:/root/kubeadm-ha
-$ scp -r * root@k8s-node2:/root/kubeadm-ha
-$ scp -r * root@k8s-node3:/root/kubeadm-ha
-$ scp -r * root@k8s-node4:/root/kubeadm-ha
-$ scp -r * root@k8s-node5:/root/kubeadm-ha
-$ scp -r * root@k8s-node6:/root/kubeadm-ha
-$ scp -r * root@k8s-node7:/root/kubeadm-ha
-$ scp -r * root@k8s-node8:/root/kubeadm-ha
+$ scp -r * root@k8s-m1:/root/kubeadm-ha
+$ scp -r * root@k8s-m2:/root/kubeadm-ha
+$ scp -r * root@k8s-m3:/root/kubeadm-ha
+$ scp -r * root@k8s-n1:/root/kubeadm-ha
+$ scp -r * root@k8s-n2:/root/kubeadm-ha
+$ scp -r * root@k8s-n3:/root/kubeadm-ha
+$ scp -r * root@k8s-n4:/root/kubeadm-ha
+$ scp -r * root@k8s-n5:/root/kubeadm-ha
+$ scp -r * root@k8s-n6:/root/kubeadm-ha
+$ scp -r * root@k8s-n7:/root/kubeadm-ha
+$ scp -r * root@k8s-n8:/root/kubeadm-ha
 ```
 
 ---
@@ -301,10 +302,10 @@ $ yum search docker --showduplicates
 $ yum install docker-1.12.6-16.el7.centos.x86_64
 
 $ yum search kubelet --showduplicates
-$ yum install kubelet-1.7.0-0.x86_64
+$ yum install kubelet-1.8.2-0.x86_64
 
 $ yum search kubeadm --showduplicates
-$ yum install kubeadm-1.7.0-0.x86_64
+$ yum install kubeadm-1.8.2-0.x86_64
 
 $ yum search kubernetes-cni --showduplicates
 $ yum install kubernetes-cni-0.5.1-0.x86_64
@@ -339,21 +340,24 @@ $ docker load -i /root/kubeadm-ha/docker-images/nginx
 
 $ docker images
 REPOSITORY                                               TAG                 IMAGE ID            CREATED             SIZE
-gcr.io/google_containers/kube-proxy-amd64                v1.7.0              d2d44013d0f8        4 days ago          114.7 MB
-gcr.io/google_containers/kube-apiserver-amd64            v1.7.0              f0d4b746fb2b        4 days ago          185.2 MB
-gcr.io/google_containers/kube-controller-manager-amd64   v1.7.0              36bf73ed0632        4 days ago          137 MB
-gcr.io/google_containers/kube-scheduler-amd64            v1.7.0              5c9a7f60a95c        4 days ago          77.16 MB
-gcr.io/google_containers/k8s-dns-sidecar-amd64           1.14.4              38bac66034a6        7 days ago          41.81 MB
-gcr.io/google_containers/k8s-dns-kube-dns-amd64          1.14.4              a8e00546bcf3        7 days ago          49.38 MB
-gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64     1.14.4              f7f45b9cb733        7 days ago          41.41 MB
-nginx                                                    latest              958a7ae9e569        4 weeks ago         109.4 MB
-gcr.io/google_containers/kubernetes-dashboard-amd64      v1.6.1              71dfe833ce74        6 weeks ago         134.4 MB
-quay.io/coreos/flannel                                   v0.7.1-amd64        cd4ae0be5e1b        10 weeks ago        77.76 MB
-gcr.io/google_containers/heapster-amd64                  v1.3.0              f9d33bedfed3        3 months ago        68.11 MB
-gcr.io/google_containers/etcd-amd64                      3.0.17              243830dae7dd        4 months ago        168.9 MB
-gcr.io/google_containers/heapster-grafana-amd64          v4.0.2              a1956d2a1a16        5 months ago        131.5 MB
-gcr.io/google_containers/heapster-influxdb-amd64         v1.1.1              d3fccbedd180        5 months ago        11.59 MB
-gcr.io/google_containers/pause-amd64                     3.0                 99e59f495ffa        14 months ago       746.9 kB
+nginx                                                    latest              c59f17fe53b0        43 hours ago        108 MB
+gcr.io/google_containers/kube-apiserver-amd64            v1.8.2              6278a1092d08        4 days ago          194 MB
+gcr.io/google_containers/kube-apiserver                  v1.8.2              6278a1092d08        4 days ago          194 MB
+gcr.io/google_containers/kube-controller-manager-amd64   v1.8.2              5eabb0eae58b        4 days ago          129 MB
+gcr.io/google_containers/kube-controller-manager         v1.8.2              5eabb0eae58b        4 days ago          129 MB
+gcr.io/google_containers/kube-scheduler-amd64            v1.8.2              b48970f8473e        4 days ago          54.9 MB
+gcr.io/google_containers/kube-scheduler                  v1.8.2              b48970f8473e        4 days ago          54.9 MB
+gcr.io/google_containers/kube-proxy-amd64                v1.8.2              88e2c85d3d02        4 days ago          93.1 MB
+gcr.io/google_containers/k8s-dns-kube-dns-amd64          1.14.7              5d049a8c4eec        5 days ago          50.3 MB
+gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64     1.14.7              5feec37454f4        5 days ago          40.9 MB
+gcr.io/google_containers/heapster-amd64                  v1.4.3              6450eba57f23        3 weeks ago         73.4 MB
+gcr.io/google_containers/kubernetes-dashboard-amd64      v1.7.1              294879c6444e        3 weeks ago         128 MB
+gcr.io/google_containers/heapster-influxdb-amd64         v1.3.3              577260d221db        7 weeks ago         12.5 MB
+gcr.io/google_containers/heapster-grafana-amd64          v4.4.3              8cb3de219af7        7 weeks ago         152 MB
+quay.io/coreos/flannel                                   v0.8.0-amd64        9db3bab8c19e        3 months ago        50.7 MB
+gcr.io/google_containers/etcd-amd64                      3.0.17              243830dae7dd        8 months ago        169 MB
+gcr.io/google_containers/pause-amd64                     3.0                 99e59f495ffa        18 months ago       747 kB
+
 ```
 
 ---
@@ -369,6 +373,8 @@ gcr.io/google_containers/pause-amd64                     3.0                 99e
 $ docker stop etcd && docker rm etcd
 $ rm -rf /var/lib/etcd-cluster
 $ mkdir -p /var/lib/etcd-cluster
+$ rm -rf /var/lib/etcd
+$ mkdir -p /var/lib/etcd
 $ docker run -d \
 --restart always \
 -v /etc/ssl/certs:/etc/ssl/certs \
@@ -379,12 +385,12 @@ $ docker run -d \
 --name etcd \
 gcr.io/google_containers/etcd-amd64:3.0.17 \
 etcd --name=etcd0 \
---advertise-client-urls=http://192.168.60.71:2379,http://192.168.60.71:4001 \
+--advertise-client-urls=http://192.168.51.34:2379,http://192.168.51.34:4001 \
 --listen-client-urls=http://0.0.0.0:2379,http://0.0.0.0:4001 \
---initial-advertise-peer-urls=http://192.168.60.71:2380 \
+--initial-advertise-peer-urls=http://192.168.51.34:2380 \
 --listen-peer-urls=http://0.0.0.0:2380 \
 --initial-cluster-token=9477af68bbee1b9ae037d6fd9e7efefd \
---initial-cluster=etcd0=http://192.168.60.71:2380,etcd1=http://192.168.60.72:2380,etcd2=http://192.168.60.73:2380 \
+--initial-cluster=etcd0=http://192.168.51.34:2380,etcd1=http://192.168.51.35:2380,etcd2=http://192.168.51.36:2380 \
 --initial-cluster-state=new \
 --auto-tls \
 --peer-auto-tls \
@@ -397,6 +403,8 @@ etcd --name=etcd0 \
 $ docker stop etcd && docker rm etcd
 $ rm -rf /var/lib/etcd-cluster
 $ mkdir -p /var/lib/etcd-cluster
+$ rm -rf /var/lib/etcd
+$ mkdir -p /var/lib/etcd
 $ docker run -d \
 --restart always \
 -v /etc/ssl/certs:/etc/ssl/certs \
@@ -407,12 +415,12 @@ $ docker run -d \
 --name etcd \
 gcr.io/google_containers/etcd-amd64:3.0.17 \
 etcd --name=etcd1 \
---advertise-client-urls=http://192.168.60.72:2379,http://192.168.60.72:4001 \
+--advertise-client-urls=http://192.168.51.35:2379,http://192.168.51.35:4001 \
 --listen-client-urls=http://0.0.0.0:2379,http://0.0.0.0:4001 \
---initial-advertise-peer-urls=http://192.168.60.72:2380 \
+--initial-advertise-peer-urls=http://192.168.51.35:2380 \
 --listen-peer-urls=http://0.0.0.0:2380 \
 --initial-cluster-token=9477af68bbee1b9ae037d6fd9e7efefd \
---initial-cluster=etcd0=http://192.168.60.71:2380,etcd1=http://192.168.60.72:2380,etcd2=http://192.168.60.73:2380 \
+--initial-cluster=etcd0=http://192.168.51.34:2380,etcd1=http://192.168.51.35:2380,etcd2=http://192.168.51.36:2380 \
 --initial-cluster-state=new \
 --auto-tls \
 --peer-auto-tls \
@@ -425,6 +433,8 @@ etcd --name=etcd1 \
 $ docker stop etcd && docker rm etcd
 $ rm -rf /var/lib/etcd-cluster
 $ mkdir -p /var/lib/etcd-cluster
+$ rm -rf /var/lib/etcd
+$ mkdir -p /var/lib/etcd
 $ docker run -d \
 --restart always \
 -v /etc/ssl/certs:/etc/ssl/certs \
@@ -435,35 +445,33 @@ $ docker run -d \
 --name etcd \
 gcr.io/google_containers/etcd-amd64:3.0.17 \
 etcd --name=etcd2 \
---advertise-client-urls=http://192.168.60.73:2379,http://192.168.60.73:4001 \
+--advertise-client-urls=http://192.168.51.36:2379,http://192.168.51.36:4001 \
 --listen-client-urls=http://0.0.0.0:2379,http://0.0.0.0:4001 \
---initial-advertise-peer-urls=http://192.168.60.73:2380 \
+--initial-advertise-peer-urls=http://192.168.51.36:2380 \
 --listen-peer-urls=http://0.0.0.0:2380 \
 --initial-cluster-token=9477af68bbee1b9ae037d6fd9e7efefd \
---initial-cluster=etcd0=http://192.168.60.71:2380,etcd1=http://192.168.60.72:2380,etcd2=http://192.168.60.73:2380 \
+--initial-cluster=etcd0=http://192.168.51.34:2380,etcd1=http://192.168.51.35:2380,etcd2=http://192.168.51.36:2380 \
 --initial-cluster-state=new \
 --auto-tls \
 --peer-auto-tls \
 --data-dir=/var/lib/etcd
 ```
 
-* 在k8s-master1、k8s-master2、k8s-master3上检查etcd启动状态
+* 在k8s-m1、k8s-m2、k8s-m3上检查etcd启动状态
 
 ```
-$ docker exec -ti etcd ash
-
-$ etcdctl member list
-1a32c2d3f1abcad0: name=etcd2 peerURLs=http://192.168.60.73:2380 clientURLs=http://192.168.60.73:2379,http://192.168.60.73:4001 isLeader=false
-1da4f4e8b839cb79: name=etcd1 peerURLs=http://192.168.60.72:2380 clientURLs=http://192.168.60.72:2379,http://192.168.60.72:4001 isLeader=false
-4238bcb92d7f2617: name=etcd0 peerURLs=http://192.168.60.71:2380 clientURLs=http://192.168.60.71:2379,http://192.168.60.71:4001 isLeader=true
-
-$ etcdctl cluster-health
-member 1a32c2d3f1abcad0 is healthy: got healthy result from http://192.168.60.73:2379
-member 1da4f4e8b839cb79 is healthy: got healthy result from http://192.168.60.72:2379
-member 4238bcb92d7f2617 is healthy: got healthy result from http://192.168.60.71:2379
+# docker exec -ti etcd ash
+/ # etcdctl member list
+64498732186766da: name=etcd0 peerURLs=http://192.168.51.34:2380 clientURLs=http://192.168.51.34:2379,http://192.168.51.34:4001 isLeader=true
+7b060585dbf1b33d: name=etcd2 peerURLs=http://192.168.51.36:2380 clientURLs=http://192.168.51.36:2379,http://192.168.51.36:4001 isLeader=false
+fc14b30b70fb35ed: name=etcd1 peerURLs=http://192.168.51.35:2380 clientURLs=http://192.168.51.35:2379,http://192.168.51.35:4001 isLeader=false
+/ # etcdctl cluster-health
+member 64498732186766da is healthy: got healthy result from http://192.168.51.34:2379
+member 7b060585dbf1b33d is healthy: got healthy result from http://192.168.51.36:2379
+member fc14b30b70fb35ed is healthy: got healthy result from http://192.168.51.35:2379
 cluster is healthy
+/ # exit
 
-$ exit
 ```
 
 ---
@@ -471,28 +479,30 @@ $ exit
 
 #### kubeadm初始化
 
-* 在k8s-master1上修改kubeadm-init-v1.7.x.yaml文件，设置etcd.endpoints的${HOST_IP}为k8s-master1、k8s-master2、k8s-master3的IP地址。设置apiServerCertSANs的${HOST_IP}为k8s-master1、k8s-master2、k8s-master3的IP地址，${HOST_NAME}为k8s-master1、k8s-master2、k8s-master3，${VIRTUAL_IP}为keepalived的虚拟IP地址
+强烈建议安装之前阅读关于kubeadm的设计文档：https://github.com/kubernetes/kubeadm/blob/master/docs/design/design_v1.8.md
+
+* 在k8s-m1上修改kubeadm-init-v1.8.x.yaml文件，设置etcd.endpoints的${HOST_IP}为k8s-m1、k8s-m2、k8s-m3的IP地址。设置apiServerCertSANs的${HOST_IP}为k8s-m1、k8s-m2、k8s-m3的IP地址，${HOST_NAME}为k8s-m1、k8s-m2、k8s-m3，${VIRTUAL_IP}为keepalived的虚拟IP地址
 
 ```
-$ vi /root/kubeadm-ha/kubeadm-init-v1.7.x.yaml 
+$ vi kubeadm-init-v1.8.x.yaml
 apiVersion: kubeadm.k8s.io/v1alpha1
 kind: MasterConfiguration
-kubernetesVersion: v1.7.0
+kubernetesVersion: v1.8.0
 networking:
   podSubnet: 10.244.0.0/16
 apiServerCertSANs:
-- k8s-master1
-- k8s-master2
-- k8s-master3
-- 192.168.60.71
-- 192.168.60.72
-- 192.168.60.73
-- 192.168.60.80
+- k8s-m1
+- k8s-m2
+- k8s-m3
+- 192.168.51.34
+- 192.168.51.35
+- 192.168.51.36
+- 192.168.51.37
 etcd:
   endpoints:
-  - http://192.168.60.71:2379
-  - http://192.168.60.72:2379
-  - http://192.168.60.73:2379
+  - http://192.168.51.34:2379
+  - http://192.168.51.35:2379
+  - http://192.168.51.36:2379
 ```
 
 * 如果使用kubeadm初始化集群，启动过程可能会卡在以下位置，那么可能是因为cgroup-driver参数与docker的不一致引起
@@ -512,10 +522,10 @@ $ systemctl daemon-reload && systemctl restart kubelet
 * 在k8s-master1上使用kubeadm初始化kubernetes集群，连接外部etcd集群
 
 ```
-$ kubeadm init --config=/root/kubeadm-ha/kubeadm-init-v1.7.x.yaml
+$ kubeadm init --config=/root/kubeadm-ha/kubeadm-init-v1.8.x.yaml
 ```
 
-* 在k8s-master1上修改kube-apiserver.yaml的admission-control，v1.7.0使用了NodeRestriction等安全检查控制，务必设置成v1.6.x推荐的admission-control配置
+* 在k8s-master1上修改kube-apiserver.yaml的admission-control，v1.8.0使用了NodeRestriction等安全检查控制，务必设置成v1.6.x推荐的admission-control配置
 
 ```
 $ vi /etc/kubernetes/manifests/kube-apiserver.yaml
