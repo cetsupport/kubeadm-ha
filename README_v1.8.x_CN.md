@@ -169,9 +169,9 @@ $ docker pull gcr.io/google_containers/kube-proxy-amd64:v1.8.2
 $ docker pull gcr.io/google_containers/kube-apiserver-amd64:v1.8.2
 $ docker pull gcr.io/google_containers/kube-controller-manager-amd64:v1.8.2
 $ docker pull gcr.io/google_containers/kube-scheduler-amd64:v1.8.2
-$ docker pull gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.7
-$ docker pull gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.7
-$ docker pull gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.7
+$ docker pull gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.5
+$ docker pull gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.5
+$ docker pull gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.5
 $ docker pull nginx:latest
 $ docker pull gcr.io/google_containers/kubernetes-dashboard-amd64:v1.7.1
 $ docker pull quay.io/coreos/flannel:v0.8.0-amd64
@@ -197,9 +197,9 @@ $ docker save -o docker-images/kube-proxy-amd64  gcr.io/google_containers/kube-p
 $ docker save -o docker-images/kube-apiserver-amd64  gcr.io/google_containers/kube-apiserver-amd64:v1.8.2
 $ docker save -o docker-images/kube-controller-manager-amd64  gcr.io/google_containers/kube-controller-manager-amd64:v1.8.2
 $ docker save -o docker-images/kube-scheduler-amd64  gcr.io/google_containers/kube-scheduler-amd64:v1.8.2
-$ docker save -o docker-images/k8s-dns-sidecar-amd64  gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.7
-$ docker save -o docker-images/k8s-dns-kube-dns-amd64  gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.7
-$ docker save -o docker-images/k8s-dns-dnsmasq-nanny-amd64  gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.7
+$ docker save -o docker-images/k8s-dns-sidecar-amd64  gcr.io/google_containers/k8s-dns-sidecar-amd64:1.14.5
+$ docker save -o docker-images/k8s-dns-kube-dns-amd64  gcr.io/google_containers/k8s-dns-kube-dns-amd64:1.14.5
+$ docker save -o docker-images/k8s-dns-dnsmasq-nanny-amd64  gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64:1.14.5
 $ docker save -o docker-images/nginx  nginx:latest
 $ docker save -o docker-images/kubernetes-dashboard-amd64  gcr.io/google_containers/kubernetes-dashboard-amd64:v1.7.1
 $ docker save -o docker-images/flannel  quay.io/coreos/flannel:v0.8.0-amd64
@@ -340,7 +340,7 @@ $ docker load -i /root/kubeadm-ha/docker-images/nginx
 
 $ docker images
 REPOSITORY                                               TAG                 IMAGE ID            CREATED             SIZE
-nginx                                                    latest              c59f17fe53b0        43 hours ago        108 MB
+nginx                                                    latest              c59f17fe53b0        45 hours ago        108 MB
 gcr.io/google_containers/kube-apiserver-amd64            v1.8.2              6278a1092d08        4 days ago          194 MB
 gcr.io/google_containers/kube-apiserver                  v1.8.2              6278a1092d08        4 days ago          194 MB
 gcr.io/google_containers/kube-controller-manager-amd64   v1.8.2              5eabb0eae58b        4 days ago          129 MB
@@ -348,15 +348,17 @@ gcr.io/google_containers/kube-controller-manager         v1.8.2              5ea
 gcr.io/google_containers/kube-scheduler-amd64            v1.8.2              b48970f8473e        4 days ago          54.9 MB
 gcr.io/google_containers/kube-scheduler                  v1.8.2              b48970f8473e        4 days ago          54.9 MB
 gcr.io/google_containers/kube-proxy-amd64                v1.8.2              88e2c85d3d02        4 days ago          93.1 MB
-gcr.io/google_containers/k8s-dns-kube-dns-amd64          1.14.7              5d049a8c4eec        5 days ago          50.3 MB
-gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64     1.14.7              5feec37454f4        5 days ago          40.9 MB
 gcr.io/google_containers/heapster-amd64                  v1.4.3              6450eba57f23        3 weeks ago         73.4 MB
 gcr.io/google_containers/kubernetes-dashboard-amd64      v1.7.1              294879c6444e        3 weeks ago         128 MB
+gcr.io/google_containers/k8s-dns-sidecar-amd64           1.14.5              fed89e8b4248        4 weeks ago         41.8 MB
+gcr.io/google_containers/k8s-dns-kube-dns-amd64          1.14.5              512cd7425a73        4 weeks ago         49.4 MB
+gcr.io/google_containers/k8s-dns-dnsmasq-nanny-amd64     1.14.5              459944ce8cc4        4 weeks ago         41.4 MB
 gcr.io/google_containers/heapster-influxdb-amd64         v1.3.3              577260d221db        7 weeks ago         12.5 MB
 gcr.io/google_containers/heapster-grafana-amd64          v4.4.3              8cb3de219af7        7 weeks ago         152 MB
 quay.io/coreos/flannel                                   v0.8.0-amd64        9db3bab8c19e        3 months ago        50.7 MB
 gcr.io/google_containers/etcd-amd64                      3.0.17              243830dae7dd        8 months ago        169 MB
 gcr.io/google_containers/pause-amd64                     3.0                 99e59f495ffa        18 months ago       747 kB
+
 
 ```
 
