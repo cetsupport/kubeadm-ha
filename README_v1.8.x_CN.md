@@ -79,9 +79,9 @@
 
 * 负载均衡
 
-> keepalived集群设置一个虚拟ip地址，虚拟ip地址指向k8s-m-1、k8s-m-2、k8s-m-3。
+> keepalived集群设置一个虚拟ip地址，虚拟ip地址指向k8s-m1、k8s-m2、k8s-m3。
 
-> nginx用于k8s-m-1、k8s-m-2、k8s-m-3的apiserver的负载均衡。外部kubectl以及nodes访问apiserver的时候就可以用过keepalived的虚拟ip(192.168.51.31)以及nginx端口(8443)访问master集群的apiserver。
+> nginx用于k8s-m1、k8s-m2、k8s-m3的apiserver的负载均衡。外部kubectl以及nodes访问apiserver的时候就可以用过keepalived的虚拟ip(192.168.51.31)以及nginx端口(8443)访问master集群的apiserver。
 
 ---
 [返回目录](#目录)
@@ -93,8 +93,8 @@
  k8s-m-1 | 192.168.51.34 | master节点1 | keepalived、nginx、etcd、kubelet、kube-apiserver、kube-scheduler、kube-proxy、kube-dashboard、heapster
  k8s-m-2 | 192.168.51.35 | master节点2 | keepalived、nginx、etcd、kubelet、kube-apiserver、kube-scheduler、kube-proxy、kube-dashboard、heapster
  k8s-m-3 | 192.168.51.36 | master节点3 | keepalived、nginx、etcd、kubelet、kube-apiserver、kube-scheduler、kube-proxy、kube-dashboard、heapster
- 无 | 192.168.51.31 | keepalived虚拟IP | 无
- k8s-node1 ~ 8 | 192.168.51.61 ~ 68 | 8个node节点 | kubelet、kube-proxy
+ 无 | 192.168.51.37 | keepalived虚拟IP | 无
+ k8s-node1 ~ 8 | 192.168.51.65 ~ 72 | 8个node节点 | kubelet、kube-proxy
 
 按照Kubernetes官方推荐，docker, kubelet, 和kube-proxy在容器外安装和运行。 其他服务比如etcd, kube-apiserver, kube-controller-manager, 和 kube-scheduler推荐以容器方式运行。
 
@@ -157,11 +157,10 @@ Kubernetes v1.8.2
 
 #### 所需docker镜像
 
-* 国内可以使用daocloud加速器下载相关镜像，然后通过docker save、docker load把本地下载的镜像放到kubernetes集群的所在机器上，daocloud加速器链接如下：
+* 国内可以使用daocloud加速器下载相关镜像，然后通过docker save、docker load把本地下载的镜像放到kubernetes集群的所在机器上，[daocloud加速器链接](https://www.daocloud.io/mirror#accelerator-doc)如下：
 
-[https://www.daocloud.io/mirror#accelerator-doc](https://www.daocloud.io/mirror#accelerator-doc)
 
-* 在本机上pull相关docker镜像（可使用 https://console.cloud.google.com/gcr/images/google-containers/GLOBAL 搜索最新版本）。也可以参考官方文档(https://kubernetes.io/docs/admin/kubeadm/#config-file) “Running kubeadm without an internet connection”章节
+* 在本机上pull相关docker镜像(可使用[Google Cloud](https://console.cloud.google.com/gcr/images/google-containers/GLOBAL) 搜索最新版本)。也可以参考[官方文档](https://kubernetes.io/docs/admin/kubeadm/#config-file) “Running kubeadm without an internet connection”章节
 
 
 ```
