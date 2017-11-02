@@ -81,7 +81,7 @@
 
 > keepalived集群设置一个虚拟ip地址，虚拟ip地址指向k8s-m1、k8s-m2、k8s-m3。
 
-> nginx用于k8s-m1、k8s-m2、k8s-m3的apiserver的负载均衡。外部kubectl以及nodes访问apiserver的时候就可以用过keepalived的虚拟ip(192.168.51.31)以及nginx端口(8443)访问master集群的apiserver。
+> nginx用于k8s-m1、k8s-m2、k8s-m3的apiserver的负载均衡。外部kubectl以及nodes访问apiserver的时候就可以用过keepalived的虚拟ip(92.168.51.37)以及nginx端口(8443)访问master集群的apiserver。
 
 ---
 [返回目录](#目录)
@@ -157,10 +157,10 @@ Kubernetes v1.8.2
 
 #### 所需docker镜像
 
-* 国内可以使用daocloud加速器下载相关镜像，然后通过docker save、docker load把本地下载的镜像放到kubernetes集群的所在机器上，[daocloud加速器链接](https://www.daocloud.io/mirror#accelerator-doc)如下：
+* 国内可以使用[daocloud加速器](https://www.daocloud.io/mirror#accelerator-doc)下载相关镜像，然后通过docker save、docker load把本地下载的镜像放到kubernetes集群的所在机器上。
 
 
-* 在本机上pull相关docker镜像(可使用[Google Cloud](https://console.cloud.google.com/gcr/images/google-containers/GLOBAL) 搜索最新版本)。也可以参考[官方文档](https://kubernetes.io/docs/admin/kubeadm/#config-file) “Running kubeadm without an internet connection”章节
+* 在本机上pull相关版本的docker镜像(可使用[Google Cloud](https://console.cloud.google.com/gcr/images/google-containers/GLOBAL) 搜索最新版本，可以参考[官方文档](https://kubernetes.io/docs/admin/kubeadm/#config-file) “Running kubeadm without an internet connection”章节)
 
 
 ```
@@ -209,7 +209,7 @@ $ docker save -o docker-images/heapster-influxdb-amd64  gcr.io/google_containers
 $ docker save -o docker-images/pause-amd64  gcr.io/google_containers/pause-amd64:3.0
 ```
 
-* 在本机MacOSX上把代码以及docker镜像复制到所有节点上
+* 在本机上把代码以及docker镜像复制到所有节点上
 
 ```
 $ scp -r * root@k8s-m1:/root/kubeadm-ha
@@ -232,7 +232,7 @@ $ scp -r * root@k8s-n8:/root/kubeadm-ha
 
 * 以下在kubernetes所有节点上都是使用root用户进行操作
 
-* 在kubernetes所有节点上增加kubernetes仓库 
+* 在kubernetes所有节点上增加kubernetes仓库(如果国内无法访问google的用户可以保存Docker文件[离线安装](#所需docker镜像)) 
 
 ```
 $ cat <<EOF > /etc/yum.repos.d/kubernetes.repo
@@ -265,6 +265,12 @@ $ systemctl disable firewalld && systemctl stop firewalld && systemctl status fi
 $ vi /etc/selinux/config
 SELINUX=permissive
 ```
+* 在kubernetes所有节点上关闭Swap
+
+```
+swapoff -a
+```
+修改 /etc/fstab 文件，注释掉 SWAP 的自动挂载，使用free -m确认swap已经关闭。
 
 * 在kubernetes所有节点上设置iptables参数，否则kubeadm init会提示错误
 
@@ -272,6 +278,7 @@ SELINUX=permissive
 $ vi /etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-iptables = 1
 net.bridge.bridge-nf-call-ip6tables = 1
+vm.swappiness = 0
 ```
 
 * 在kubernetes所有节点上重启主机
@@ -298,7 +305,7 @@ Permissive
 
 ```
 $ yum search docker --showduplicates
-$ yum install docker-1.12.6-16.el7.centos.x86_64
+$ yum install docker-ce-17.03.2-ce
 
 $ yum search kubelet --showduplicates
 $ yum install kubelet-1.8.2-0.x86_64
@@ -368,7 +375,7 @@ gcr.io/google_containers/pause-amd64                     3.0                 99e
 
 #### 独立etcd集群部署
 
-* 在k8s-master1节点上以docker方式启动etcd集群
+* 在k8s-m1节点上以docker方式启动etcd集群
 
 ```
 $ docker stop etcd && docker rm etcd
@@ -398,7 +405,7 @@ etcd --name=etcd0 \
 --data-dir=/var/lib/etcd
 ```
 
-* 在k8s-master2节点上以docker方式启动etcd集群
+* 在k8s-m2节点上以docker方式启动etcd集群
 
 ```
 $ docker stop etcd && docker rm etcd
@@ -428,7 +435,7 @@ etcd --name=etcd1 \
 --data-dir=/var/lib/etcd
 ```
 
-* 在k8s-master3节点上以docker方式启动etcd集群
+* 在k8s-m3节点上以docker方式启动etcd集群
 
 ```
 $ docker stop etcd && docker rm etcd
@@ -526,7 +533,7 @@ $ systemctl daemon-reload && systemctl restart kubelet
 $ kubeadm init --config=/root/kubeadm-ha/kubeadm-init-v1.8.x.yaml
 ```
 
-* 在k8s-master1上修改kube-apiserver.yaml的admission-control，v1.8.0使用了NodeRestriction等安全检查控制，务必设置成v1.6.x推荐的admission-control配置
+* 在k8s-master1上修改kube-apiserver.yaml的admission-control，自v1.8.0开始使用了NodeRestriction等安全检查控制，务必设置成v1.6.x推荐的admission-control配置
 
 ```
 $ vi /etc/kubernetes/manifests/kube-apiserver.yaml
@@ -583,26 +590,26 @@ kube-system   kube-scheduler-k8s-master1           1/1       Running   0        
 
 #### dashboard组件安装
 
-* 在k8s-master1上安装dashboard组件
+* 在k8s-m1上安装dashboard组件
 
 ```
-$ kubectl create -f /root/kubeadm-ha/kube-dashboard/
+$ kubectl create -f kube-dashboard/
 serviceaccount "kubernetes-dashboard" created
 clusterrolebinding "kubernetes-dashboard" created
 deployment "kubernetes-dashboard" created
 service "kubernetes-dashboard" created
 ```
 
-* 在k8s-master1上启动proxy，映射地址到0.0.0.0
+* 在k8s-m1上启动proxy，映射地址到0.0.0.0
 
 ```
 $ kubectl proxy --address='0.0.0.0' &
 ```
 
-* 在本机MacOSX上访问dashboard地址，验证dashboard成功启动
+* 在本机上访问dashboard地址，验证dashboard成功启动
 
 ```
-http://k8s-master1:30000
+http://k8s-m1:30000
 ```
 
 ![dashboard](images/dashboard.png)
@@ -612,20 +619,20 @@ http://k8s-master1:30000
 
 #### heapster组件安装
 
-* 在k8s-master1上允许在master上部署pod，否则heapster会无法部署
+* 在k8s-m1上允许在master上部署pod，否则heapster会无法部署
 
 ```
 $ kubectl taint nodes --all node-role.kubernetes.io/master-
 node "k8s-master1" tainted
 ```
 
-* 在k8s-master1上安装heapster组件，监控性能
+* 在k8s-m1上安装heapster组件，监控性能
 
 ```
-$ kubectl create -f /root/kubeadm-ha/kube-heapster
+$ kubectl create -f kube-heapster
 ```
 
-* 在k8s-master1上重启docker以及kubelet服务，让heapster在dashboard上生效显示
+* 在k8s-m1上重启docker以及kubelet服务，让heapster在dashboard上生效显示
 
 ```
 $ systemctl restart docker kubelet
@@ -648,10 +655,10 @@ kube-system   monitoring-grafana-3975459543-8l94z     1/1       Running   1     
 kube-system   monitoring-influxdb-3480804314-72ltf    1/1       Running   1          9m        10.244.0.113    k8s-master1
 ```
 
-* 在本机MacOSX上访问dashboard地址，验证heapster成功启动，查看Pods的CPU以及Memory信息是否正常呈现
+* 在本机上访问dashboard地址，验证heapster成功启动，查看Pods的CPU以及Memory信息是否正常呈现
 
 ```
-http://k8s-master1:30000
+http://k8s-m1:30000
 ```
 
 ![heapster](images/heapster.png)
@@ -665,7 +672,7 @@ http://k8s-master1:30000
 
 #### 复制配置
 
-* 在k8s-master1上把/etc/kubernetes/复制到k8s-master2、k8s-master3
+* 在k8s-m1上把/etc/kubernetes/复制到k8s-master2、k8s-master3
 
 ```
 scp -r /etc/kubernetes/ k8s-master2:/etc/
